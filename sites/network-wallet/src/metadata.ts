@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 
+import { getMetadataIcons } from '@luxdefi/common/assets'
+
 export default {
   metadataBase: new URL('https://wallet.lux.network'),
   title: {
@@ -10,38 +12,8 @@ export default {
   applicationName: 'Lux Bridge Explorer',
   authors: {name: 'Lux Dev team'},
   keywords: "Lux Network, Blockchain Bridge, Multi-Chain, EVM, Solana, Bitcoin, Cross-Chain, Interoperability, Cryptocurrency, Blockchain Technology",
-  icons: [
-    {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '16x16',
-      url: '/assets/lux-site-icons/favicon-16x16.png'   
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '32x32',
-      url: '/assets/lux-site-icons/favicon-32x32.png'   
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '192x192',
-      url: '/assets/lux-site-icons/android-chrome-192x192.png'   
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '512x512',
-      url: '/assets/lux-site-icons/android-chrome-512x512.png'   
-    },
-    {
-      rel: 'apple-touch-icon',
-      type: 'image/png',
-      sizes: "180x180",
-      url: '/assets/lux-site-icons/apple-touch-icon.png'  
-    },
-  ],
+  icons: getMetadataIcons(),
+  
   //manifest: '/site.webmanifest',
   /*
   openGraph: {
