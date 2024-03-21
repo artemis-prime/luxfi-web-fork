@@ -1,14 +1,16 @@
 import type { LinkDef } from '@hanzo/ui/types'
 
+import { getDocUrl } from '../../assets'
+
 const legal: LinkDef[] = [
   {
     title: 'Terms and Conditions',
-    href: '/terms',
+    href: getDocUrl('legal/LUX-NFT-Terms-and-Conditions.pdf'),
     newTab: true,
   },
   {
     title: 'Privacy Policy',
-    href: '/privacy',
+    href: getDocUrl('legal/LUX-Privacy-Policy.pdf'),
     newTab: true,
   },
 ] 
