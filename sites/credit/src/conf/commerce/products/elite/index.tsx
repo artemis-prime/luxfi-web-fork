@@ -1,4 +1,6 @@
 import type { Product } from '@hanzo/commerce/types'
+import { getProductImgUrl } from '@luxdefi/common/assets'
+
 import type { CardCategory } from '@/types'
 
 import MDX_Content from './detail.mdx'
@@ -8,7 +10,7 @@ export default {
   id: 'LXM-CR-E',
   material: '24k Gold or Sterling Silver',
   title: 'Lux Elite Card',
-  img: '/assets/img/cards-dual-gd-sl-1485x1114.png',
+  img: getProductImgUrl('LXM-CR-E', 'cards-pair-gd-sl-1485x1114.png'),
   run: 100000,
   fees: {
     initial: 1000,
@@ -23,7 +25,7 @@ export default {
       title: 'Lux Elite Card, 24k Gold',
       titleAsOption: '24k Gold',
       price: 500,
-      img: '/assets/img/cards-flat/gold-f-700x442.png',
+      img: getProductImgUrl('LXM-CR-E', 'gd-ls-700x442.png'),
     } satisfies Product,
     {
       id: 'LXM-CR-E-SS',
@@ -32,7 +34,7 @@ export default {
       title: 'Lux Elite Card, Sterling Silver',
       titleAsOption: 'Sterling Silver',
       price: 500,
-      img: '/assets/img/cards-flat/silver-f-700x441.png',
+      img: getProductImgUrl('LXM-CR-E', 'sl-ls-700x441.png'),
     } satisfies Product,
   ]
 } satisfies CardCategory 

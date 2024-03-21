@@ -1,4 +1,6 @@
 import type { Product } from '@hanzo/commerce/types'
+import { getProductImgUrl } from '@luxdefi/common/assets'
+
 import type { CardCategory } from '@/types'
 
 import MDX_Content from './detail.mdx'
