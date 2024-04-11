@@ -60,7 +60,6 @@ const DesktopViewCardDetails: React.FC<{
           <h3 className='!text-2xl self-start'>{card.title}</h3>
           <div className={cn(
               'w-full transition-all duration-300',
-              showAnimation ? 'opacity-100' : 'opacity-0',
             )}
           >
             <SplinePlayer src={currentAnimation} className='!aspect-[12/10]'/>

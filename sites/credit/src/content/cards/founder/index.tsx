@@ -82,7 +82,7 @@ const card: Card = {
       },
       {
         title: 'Automate payment with rewards',
-        description: 'Earn 9% rewards off your average available credit automatically, you can also use it to pay off your balance as you spend or pay your annual fee.'
+        description: 'Earn 8% rewards off your average available credit automatically, you can also use it to pay off your balance as you spend or pay your annual fee.'
       },
       {
         title: 'Lifestyle Perks and Financial Wellness',
