@@ -15,7 +15,7 @@ import BuyDrawer from '../components/commerce/buy-drawer'
 import CheckoutWidget from '../components/commerce/checkout-widget'
 
 import { selectionUISpecifiers } from '../conf'
-import type SiteDef from '../site-def/site-def'
+import type SiteDef from '../types/site-def'
 
 import '../style/lux-global.css'
 import '../style/cart-animation.css'
@@ -59,7 +59,7 @@ const RootLayout: React.FC<PropsWithChildren & {
 }) =>  {
 
   const currentUser = await getUserServerSide()
-  const usingCommerce = siteDef?.ext?.commerce && siteDef.ext.commerce.rootNode && siteDef.ext.commerce.families
+  const usingCommerce = siteDef?.commerce && siteDef.commerce.rootNode && siteDef.commerce.families
 
   const Guts: React.FC = () => (<>
     {showHeader && <Header siteDef={siteDef}/>}
@@ -69,7 +69,7 @@ const RootLayout: React.FC<PropsWithChildren & {
         title='LUX'
         subtitle='AI'
         chatbotUrl='https://lux.chat/iframe'
-        suggestedQuestions={siteDef.ext?.chatBot?.suggestedQuestions ?? []}
+        suggestedQuestions={siteDef.chatbot?.suggestedQuestions ?? []}
       />
     )}
   </>)
@@ -95,9 +95,9 @@ const RootLayout: React.FC<PropsWithChildren & {
         <AuthServiceProvider user={currentUser} conf={{} as AuthServiceConf}>
         {usingCommerce ? (
           <CommerceProvider
-            rootNode={siteDef.ext.commerce.rootNode}
-            families={siteDef.ext.commerce.families}
-            options={siteDef.ext.commerce.options}
+            rootNode={siteDef.commerce!.rootNode}
+            families={siteDef.commerce!.families}
+            options={siteDef.commerce!.options}
             uiSpecs={selectionUISpecifiers}
           >
             <Guts />
