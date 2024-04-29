@@ -5,11 +5,14 @@ import bullionByFamily from './AUTO-GEN-bullion-by-family.json'
 import assignPrices from './assign-prices'
 import assignVideosByFamilyGroup from './assign-videos-by-family-group'
 
-export default (videoMap: Map<string, VideoDef>) => (
+export const getBullionFamilies = (videoMap: Map<string, VideoDef>) => (
   bullionByFamily.map(
     (fam) => (assignPrices(fam))).map(
       (fam) => (assignVideosByFamilyGroup(fam, videoMap)
     )
   )
 )
+
+export { default as serviceOptions } from './lux-service-options'
+export { default as bullionPrice1oz } from './bullion-price-1oz'
 

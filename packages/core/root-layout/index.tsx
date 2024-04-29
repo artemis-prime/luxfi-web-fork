@@ -59,7 +59,6 @@ const RootLayout: React.FC<PropsWithChildren & {
 }) =>  {
 
   const currentUser = await getUserServerSide()
-  const usingCommerce = siteDef?.commerce && siteDef.commerce.rootNode && siteDef.commerce.families
 
   const Guts: React.FC = () => (<>
     {showHeader && <Header siteDef={siteDef}/>}
@@ -93,7 +92,7 @@ const RootLayout: React.FC<PropsWithChildren & {
       }}>
         <Scripts/>
         <AuthServiceProvider user={currentUser} conf={{} as AuthServiceConf}>
-        {usingCommerce ? (
+        {siteDef?.commerce ? (
           <CommerceProvider
             rootNode={siteDef.commerce!.rootNode}
             families={siteDef.commerce!.families}

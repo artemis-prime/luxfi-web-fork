@@ -1,15 +1,17 @@
-import type { Family } from '@hanzo/commerce/types'
+import type { VideoDef } from '@hanzo/ui/types'
 
-import bullionFamilies from './ag-au-families'
+
+import { getBullionFamilies } from '@luxfi/core/commerce'
+
 import crFamilies from './cr-families'
 import coin from './cn'
 import validator from './vl'
-import pass from './ps'
+import key from './ps'
+import { gold as goldVideo, silver as silverVideo } from './videos' 
 
-export default [
-  ...bullionFamilies, 
-  ...crFamilies, 
-  coin, 
-  validator, 
-  pass
-] satisfies Family[]
+const videoMap = new Map<string, VideoDef>([
+  ['Lux Gold', goldVideo],
+  ['Lux Silver', silverVideo]
+])
+
+export default [...getBullionFamilies(videoMap), ...crFamilies, coin, validator, key]
