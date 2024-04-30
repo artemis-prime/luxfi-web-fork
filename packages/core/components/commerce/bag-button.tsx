@@ -9,10 +9,17 @@ import { useCommerce } from '@hanzo/commerce'
 
 import * as Icons from '../icons'
 
+const ANIM_CLX = {
+  added: 'item-added-to-cart-animation',
+  removed: 'item-removed-from-cart-animation',
+  none: ''
+}
+
 const BagButton: React.FC<{
   showIfEmpty?: boolean  
   animateOnHover?: boolean
   animateOnQuantityChange?: boolean
+  asCheckout?: boolean
   size?: VariantProps<typeof buttonVariants>['size']
   className?: string
   iconClx?: string
@@ -20,15 +27,16 @@ const BagButton: React.FC<{
 }> = observer(({
   showIfEmpty=false,
   animateOnHover=true,
-  animateOnQuantityChange=true,
-  size='default',
+  animateOnQuantityChange=false,
+  asCheckout=true,
+  size: _size='sm',
   className='',
   iconClx='',
   onClick
 }) => {
 
   const c = useCommerce()
-  const wiggleRef = useRef<IObservableValue<'more' | 'less' | 'none'>>(observable.box('none'))
+  const animKeyRef = useRef<IObservableValue<keyof typeof ANIM_CLX>>(observable.box('none'))
 
   useEffect(() => (
       // return IReactionDisposer
@@ -36,15 +44,15 @@ const BagButton: React.FC<{
       () => (c.cartQuantity),
       (curr, prev) => {
         if (curr > prev) {
-          wiggleRef.current.set('more')   
+          animKeyRef.current.set('added')   
         }
         else {
-          wiggleRef.current.set('less')   
+          animKeyRef.current.set('removed')   
         }    
         setTimeout(() => {
             // Note that this doesn't actually stop the animation
-            // just resets the styles
-          wiggleRef.current.set('none')   
+            // just resets the styles after it plays (hence the longer time)
+          animKeyRef.current.set('none')   
         }, 800)
       }
     ) : undefined
@@ -55,42 +63,47 @@ const BagButton: React.FC<{
     return <div /> // trigger code needs non-null 
   }
 
+  const iconDim = asCheckout ? {w: 19, h: 22} : {w : 24, h: 28}
+  const size = asCheckout ? 'sm' : _size
 
   return (
     <div
       aria-label="Bag"
       role='button'
       onClick={onClick}
-      className={cn(
-        buttonVariants({ variant: 'ghost', size, rounded: 'md' }),
+      className={cn('group',
+        buttonVariants({ variant: asCheckout ? 'primary' : 'ghost' , size, rounded: 'lg' }),
           // Overides the bg change on hover --not a "hover effect" 
-        'relative group p-0 aspect-square hover:bg-background', 
-        ((wiggleRef.current.get() === 'more') ? 
-          'item-added-to-cart-animation' 
-          : 
-          (wiggleRef.current.get() === 'less') ? 'item-removed-from-cart-animation' : ''), 
+        asCheckout ? 'px-3 md:px-4 gap-2' : 'p-0 hover:bg-background',
+        ANIM_CLX[animKeyRef.current.get()],  
         className
       )}
     >
-    {!c.cartEmpty && (
-      <div className={
-        'z-above-content flex flex-col justify-center items-center  ' +
-        'absolute left-0 right-0 top-0 bottom-0 ' + 
-        'leading-none font-sans font-bold text-primary-fg text-xs ' 
-      }>
-        <div className='h-[3px] w-full' />
-        <div>{c.cartQuantity}</div>
+      {asCheckout && (<span className='text-primary-fg not-typography font-nav font-semibold text-sm md:text-base'>Checkout</span>)} 
+      <div className='aspect-square relative'>
+      {!c.cartEmpty && (
+        <div className={
+          'z-above-content flex flex-col justify-center items-center  ' +
+          'absolute left-0 right-0 top-0 bottom-0 ' + 
+          'leading-none font-sans font-bold ' + 
+          (asCheckout ? 'text-xxs  text-foreground group-hover:opacity-80 ' : 'text-xs text-primary-fg') 
+        }>
+          <div className='h-[3px] w-full' />
+          <div>{c.cartQuantity}</div>
+        </div>
+      )}
+        <Icons.bag 
+          width={iconDim.w} 
+          height={iconDim.h} 
+          className={cn(
+            'relative -top-[3px]',
+            iconClx,
+            asCheckout ? 'fill-background' : 'fill-primary group-hover:fill-primary-hover',
+            animateOnHover ? 'group-hover:scale-105 transition-scale transition-duration-300' : ''
+          )} 
+          aria-hidden="true" 
+        />
       </div>
-    )}
-      <Icons.bag width='24' height='28' className={cn(
-        'relative -top-[3px] fill-primary',
-        iconClx,
-        (animateOnHover ? 
-          'group-hover:fill-primary-hover group-hover:scale-105 transition-scale transition-duration-300'
-          : 
-          ''
-        ) 
-      )} aria-hidden="true" />
     </div>            
   )
 })

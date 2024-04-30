@@ -15,6 +15,7 @@ const CommerceUIComponent: React.FC = observer(() => {
 
   const handleCheckout = () => {
     router.push('/checkout')
+    ui.hideBuyOptions()
   }
 
     // Should only ever be called internally to close
