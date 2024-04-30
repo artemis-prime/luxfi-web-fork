@@ -50,7 +50,7 @@ const ProductPage = ({ params, searchParams }: Props) => {
 
   return (<>
     <Header siteDef={siteDef}/>
-    <Main className='md:flex-row md:gap-4 '>
+    <Main className='md:flex-row md:gap-4 pt-[44px] md:pt-[80px]'>
       <ProductDetailBlockComponent block={product} agent={agent as string}/>
     </Main>
     <div className='border-t'></div>
