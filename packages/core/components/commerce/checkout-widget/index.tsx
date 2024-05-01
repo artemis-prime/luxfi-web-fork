@@ -11,95 +11,8 @@ import { useCommerceUI } from '@hanzo/commerce'
 
 import CheckoutButton from '../checkout-button'
 import useAnimationClxSet from './use-anim-clx-set'
-import { useItemAnimationStep, type ItemAnimationStep } from './item-anim-step'
+import useLaggingItemRef from './use-lagging-item-ref'
 import CONST from './const'
-
-const transStyle = (t: { transition: string, from : string, to: string } | undefined) : any => (
-  t ? {
-    transitionProperty: t.transition,
-    transitionTimingFunction: CONST.animTimingFn,
-    transitionDuration: `${CONST.animDurationMs}ms`
-  } : {}        
-)
-
-const transClx = (on: boolean, t: { transition: string, from : string, to: string } | undefined) : string => (
-  on ? (t?.from ?? '') : (t?.to ?? '')
-)
-
-const VARS: any = {
-  BR: {
-    pos: 'bottom-[24px] right-[66px]',
-    width: 'w-initial', 
-    centerText: false,
-    coClx: 'w-auto',
-    infoClx: 'w-auto',
-    activeItemAnim: {
-      co: { 
-        transition: 'none',
-        from : 'px-3 gap-2.5', 
-        to: ''
-      },
-      coText: {
-        transition: 'max-width',
-        from : 'max-w-[100px]', 
-        to: 'max-w-[0px]'
-      },
-      info: { 
-        transition: 'transform, opacity',
-        from : 'scale-x-100 opacity-100 origin-right', 
-        to: 'scale-x-0 opacity-0 origin-right'
-      }
-    },
-    showArrow: true
-  },
-  TR: {
-    pos: 'top-[48px] md:top-[80px] right-[28px]',
-    width: 'w-initial', 
-    centerText: false,
-    showQuantity: false,
-    showArrow: true,
-    coClx: 'w-auto px-3 gap-1',
-    infoClx: 'w-auto',
-    activeItemAnim: {
-      /*
-      co: { 
-        transition: 'none',
-        from : 'px-3 gap-2.5', 
-        to: ''
-      },
-      coText: {
-        transition: 'max-width',
-        from : 'max-w-[100px]', 
-        to: 'max-w-[0px]'
-      },
-      */
-      info: { 
-        transition: 'transform',
-        from : 'scale-x-100 origin-right', 
-        to: 'scale-x-0 origin-right'
-      }
-    },
-  },
-  TRIO: {
-    pos: 'top-[48px] md:top-[70px] right-[28px]',
-    centerText: false,
-    showQuantity: true,
-    showArrow: true,
-    width: 'w-initial', 
-    coClx: 'hidden',
-    infoClx: 'w-auto',
-    activeItemAnim: {
-      info: { 
-        transition: 'transform, opacity',
-        from : 'scale-x-100 opacity-100', 
-        to: 'scale-x-50 opacity-0'
-      }
-    },
-  }
-
-}
-
-const v = 'TRIO'
 
 const CheckoutWidget: React.FC<{
   clx?: string
@@ -113,70 +26,58 @@ const CheckoutWidget: React.FC<{
   const clxSet = useAnimationClxSet(isCheckout)
 
   const itemRef = useCommerceUI()
-  const step: ItemAnimationStep[] = []
-
-  step.push(useItemAnimationStep(itemRef))
-  step.push(useItemAnimationStep(itemRef, CONST.animDurationMs))
-  step.push(useItemAnimationStep(itemRef, CONST.animDurationMs * 2))
-  step.push(useItemAnimationStep(itemRef, CONST.animDurationMs * 3))
+  const laggingRef = useLaggingItemRef(itemRef, CONST.animDurationMs)
 
   const handleCheckout = () => { router.push('/checkout')}
 
   return globalThis?.document?.body && createPortal(
     (<div 
       className={cn(
-        VARS[v].width,
-        'z-below-modal-2 fixed ',
-        VARS[v].pos,
-        'rounded-lg',
+        'min-w-[160px] sm:max-w-[320px] w-[calc(100%-72px)] ml-2 !h-10',
+        'z-below-modal-2 fixed bottom-[20px] left-0 right-0',
+        'rounded-lg bg-background',
         'flex',
-        step[0].running ? 'bg-background' : '',
-        step[1].running ? 'gap-2' : '',
+        itemRef.item ? 'gap-2' : '',
         clxSet.asArray.join(' ')
       )}
-      style={step[1].running ? {} : VARS[v].coClx?.includes('hidden') ? {} : CONST.shadowStyle}
+      style={laggingRef.item ? {} : CONST.shadowStyle}
     >
       <div 
         className={cn(
           'flex flex-row justify-between items-center', 
-          transClx(step[0].running, VARS[v].activeItemAnim.info),
-          VARS[v].itemClx, 
-          step[1].running ? 'px-3 border rounded-lg bg-level-1 border-muted-3' : '' 
+          itemRef.item ? CONST.compWidthClx.itemInfo : 'w-0',
+          laggingRef.item ? 'px-3 border rounded-lg border-muted-3' : '' 
         )}
-        style={transStyle(VARS[v].activeItemAnim.info)}
+        style={{
+          transitionProperty: 'width',
+          transitionTimingFunction: CONST.animTimingFn,
+          transitionDuration: `${CONST.animDurationMs}ms`
+        }}
       >
-        {step[1].item?.img && (
-          <Image def={step[1].item.img} constrainTo={CONST.itemImgConstraint} preload className='grow-0 shrink-0'/>
-        )} 
-        {step[1].running && (<div className='text-foreground grow ml-1'>
-          <p className='whitespace-nowrap text-ellipsis text-sm'>{step[1].item!.title}</p>
-          <p className='whitespace-nowrap text-clip text-xxs' >recently added...</p>
-        </div>)}
+        {laggingRef.item?.img ? (
+          <Image def={laggingRef.item.img} constrainTo={CONST.itemImgConstraint} preload className='grow-0 shrink-0'/>
+        ) : ( // placeholder so things align
+          <div style={{height: CONST.itemImgConstraint.h, width: CONST.itemImgConstraint.w}} className='bg-level-3 grow-0 shrink-0'/>
+        )}
+
+        <div className='text-muted grow ml-1'>
+          {laggingRef.item && (<>
+            <p className='whitespace-nowrap text-sm'>{laggingRef.item.title}</p>
+            <p className='whitespace-nowrap text-xxs' >recently added...</p>
+          </>)}
+        </div>
       </div>
       <CheckoutButton 
         handleCheckout={handleCheckout} 
-        centerText={VARS[v].centerText ?? !!!itemRef.item}
-        variant='primary' 
-        rounded='lg' 
-        showQuantity={VARS[v].showQuantity ?? true}
-        showArrow={VARS[v].showArrow ?? true}
-        className={cn(
-          transClx((VARS[v].activeItemAnim.coText ? step[3].running : true), VARS[v].activeItemAnim.co),
-          VARS[v].coClx
-        )} 
-        style={transStyle(VARS[v].activeItemAnim.co)}
-      >
-        <div 
-          className={cn(
-            'overflow-hidden',
-            'flex justify-center items-center',
-            transClx(step[2].running, VARS[v].activeItemAnim.coText),
-          )} 
-          style={transStyle(VARS[v].activeItemAnim.coText)}
-        >
-          Checkout
-        </div>
-      </CheckoutButton>
+        centerText={!!!itemRef.item}
+        variant='primary' rounded='lg' 
+        className={cn(itemRef.item ? CONST.compWidthClx.checkout : 'w-full')} 
+        style={{
+          transitionProperty: 'width',
+          transitionTimingFunction: CONST.animTimingFn,
+          transitionDuration: `${CONST.animDurationMs}ms`
+        }}
+      />        
     </div>),
     globalThis?.document?.body
   )

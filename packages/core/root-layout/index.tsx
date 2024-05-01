@@ -69,12 +69,6 @@ const RootLayout: React.FC<PropsWithChildren & {
         subtitle='AI'
         chatbotUrl='https://lux.chat/iframe'
         suggestedQuestions={siteDef.chatbot?.suggestedQuestions ?? []}
-        chatClx={
-          'fixed bottom-0 sm:bottom-16 right-0 w-full h-full ' +
-          'sm:max-w-[400px] sm:max-h-[550px] sm:px-4 z-floating'
-        }
-          // z-index should be below anything in commerce-iu (buy drawer and checkout widget)
-        buttonClx='fixed bottom-[24px] right-[20px] z-below-modal-3'
       />
     )}
   </>)

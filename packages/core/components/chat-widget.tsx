@@ -7,6 +7,9 @@ import { cn } from '@hanzo/ui/util'
 import LuxLogo from './icons/lux-logo'
 import type { ChatbotSuggestedQuestion } from '../types'
 
+import LuxLogo from './icons/lux-logo'
+import type { ChatbotSuggestedQuestion } from '../types'
+
 const ChatWidget: React.FC<{
   title: string
   chatbotUrl: string
