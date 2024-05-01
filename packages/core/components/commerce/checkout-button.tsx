@@ -2,7 +2,6 @@
 import React, { useEffect, useRef } from 'react'
 import { observable, type IObservableValue, reaction } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { type LucideProps } from 'lucide-react'
 
 import { Button, type ButtonProps } from '@hanzo/ui/primitives'
 import { cn } from '@hanzo/ui/util'
