@@ -16,7 +16,7 @@
     "ul:all": "rm node_modules/@hanzo/*"
   },
   "dependencies": {
-    "@luxfi/core": "5.0.5",
+    "@luxfi/core": "5.0.4",
     "@hookform/resolvers": "^3.3.4",
     "@next/mdx": "14.1.0",
     "@splinetool/react-spline": "^2.2.6",
@@ -35,7 +35,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
     "supports-color": "8.1.1",
-    "zod": "3.21.4"
+    "zod": "3.23.5"
   },
   "devDependencies": {
     "@mdx-js/loader": "^3.0.0",
